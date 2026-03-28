@@ -19,8 +19,8 @@ export function Sidebar({
       <div className="space-y-0.5">
         {/* Logo */}
         <div className="px-3 py-3 mb-2">
-          <h1 className="text-xl font-bold text-[var(--foreground)]">
-            infomaxxxing
+          <h1 className="text-xl font-bold text-[var(--foreground)] uppercase">
+            infoma<span className="text-[#ff0040]">x</span><span className="text-[#00e639]">x</span><span className="text-[#0099ff]">x</span>ing
           </h1>
         </div>
 
