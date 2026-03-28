@@ -108,89 +108,90 @@ export function HomeClient({
 
       {/* Main feed column */}
       <main className="w-full max-w-[600px] border-r border-[var(--border)] flex flex-col min-h-0">
-        {selectedConcept ? (
-          /* Detail view - full screen post like X */
+        {/* Detail view - overlays feed but feed stays mounted */}
+        {selectedConcept && (
           <ConceptDetail concept={selectedConcept} onBack={handleBack} onSelectRelated={handleSelectRelated} />
-        ) : (
-          <>
-            {/* Fixed header above scroll area */}
-            <div className="shrink-0 bg-black">
-              {/* Mobile: X Tabs style header */}
-              <div className="lg:hidden">
-                {/* Row 1: logo + progress */}
-                <div className="px-4 py-2.5 flex items-center justify-between">
-                  <h1 className="text-[18px] font-bold text-white tracking-tight">infomaxxxing</h1>
+        )}
+
+        {/* Feed - always mounted, hidden when viewing a post */}
+        <div className={`flex flex-col min-h-0 flex-1 ${selectedConcept ? "hidden" : ""}`}>
+          {/* Fixed header above scroll area */}
+          <div className="shrink-0 bg-black">
+            {/* Mobile: X Tabs style header */}
+            <div className="lg:hidden">
+              {/* Row 1: logo + progress */}
+              <div className="px-4 py-2.5 flex items-center justify-between">
+                <h1 className="text-[18px] font-bold text-white tracking-tight">infomaxxxing</h1>
+                <button
+                  onClick={() => setMobileStatsOpen(!mobileStatsOpen)}
+                  className="flex items-center gap-1.5 text-white hover:text-[var(--accent)] transition-colors"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                  </svg>
+                  {progress.seenCount > 0 && (
+                    <span className="text-xs font-mono bg-[var(--accent)]/20 text-[var(--accent)] px-1.5 py-0.5 rounded-full">
+                      {progress.seenCount}
+                    </span>
+                  )}
+                </button>
+              </div>
+              {/* Row 2: X-style underlined tabs - scrollable */}
+              <div className="flex overflow-x-auto border-b border-[var(--border)]" style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}>
+                <button
+                  onClick={() => setActiveCategory(null)}
+                  className={`shrink-0 px-4 py-3 text-[14px] transition-colors relative ${
+                    activeCategory === null
+                      ? "text-[var(--foreground)] font-bold"
+                      : "text-[var(--muted)] font-medium"
+                  }`}
+                >
+                  For You
+                  {activeCategory === null && (
+                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-[3px] bg-[var(--accent)] rounded-full" />
+                  )}
+                </button>
+                {categories.map(({ category }) => (
                   <button
-                    onClick={() => setMobileStatsOpen(!mobileStatsOpen)}
-                    className="flex items-center gap-1.5 text-white hover:text-[var(--accent)] transition-colors"
-                  >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-                      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-                    </svg>
-                    {progress.seenCount > 0 && (
-                      <span className="text-xs font-mono bg-[var(--accent)]/20 text-[var(--accent)] px-1.5 py-0.5 rounded-full">
-                        {progress.seenCount}
-                      </span>
-                    )}
-                  </button>
-                </div>
-                {/* Row 2: X-style underlined tabs - scrollable */}
-                <div className="flex overflow-x-auto border-b border-[var(--border)]" style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}>
-                  <button
-                    onClick={() => setActiveCategory(null)}
-                    className={`shrink-0 px-4 py-3 text-[14px] transition-colors relative ${
-                      activeCategory === null
+                    key={category}
+                    onClick={() => setActiveCategory(activeCategory === category ? null : category)}
+                    className={`shrink-0 px-4 py-3 text-[14px] transition-colors relative whitespace-nowrap ${
+                      activeCategory === category
                         ? "text-[var(--foreground)] font-bold"
                         : "text-[var(--muted)] font-medium"
                     }`}
                   >
-                    For You
-                    {activeCategory === null && (
+                    {CATEGORY_META[category].label}
+                    {activeCategory === category && (
                       <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-[3px] bg-[var(--accent)] rounded-full" />
                     )}
                   </button>
-                  {categories.map(({ category }) => (
-                    <button
-                      key={category}
-                      onClick={() => setActiveCategory(activeCategory === category ? null : category)}
-                      className={`shrink-0 px-4 py-3 text-[14px] transition-colors relative whitespace-nowrap ${
-                        activeCategory === category
-                          ? "text-[var(--foreground)] font-bold"
-                          : "text-[var(--muted)] font-medium"
-                      }`}
-                    >
-                      {CATEGORY_META[category].label}
-                      {activeCategory === category && (
-                        <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-[3px] bg-[var(--accent)] rounded-full" />
-                      )}
-                    </button>
-                  ))}
-                </div>
+                ))}
               </div>
-              {/* Feed label - desktop only */}
-              <h2 className="px-4 py-3 text-[20px] font-bold text-[var(--foreground)] hidden lg:block border-b border-[var(--border)]">
-                {searchQuery?.trim()
-                  ? "Search"
-                  : activeCategory
-                    ? `${activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1).replace("-", " ")}`
-                    : "For You"}
-              </h2>
             </div>
+            {/* Feed label - desktop only */}
+            <h2 className="px-4 py-3 text-[20px] font-bold text-[var(--foreground)] hidden lg:block border-b border-[var(--border)]">
+              {searchQuery?.trim()
+                ? "Search"
+                : activeCategory
+                  ? `${activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1).replace("-", " ")}`
+                  : "For You"}
+            </h2>
+          </div>
 
-            {/* Scrollable feed area */}
-            <div ref={scrollRef} className="flex-1 overflow-y-auto overscroll-contain min-h-0">
-              <Feed
-                category={activeCategory}
-                searchQuery={searchQuery}
-                seenIds={progress.seenIds}
-                onConceptSelect={handleSelectConcept}
-              />
-              {/* Mobile bottom spacer so content isn't hidden behind sticky banner */}
-              <div className="h-12 lg:hidden" />
-            </div>
-          </>
-        )}
+          {/* Scrollable feed area */}
+          <div ref={scrollRef} className="flex-1 overflow-y-auto overscroll-contain min-h-0">
+            <Feed
+              category={activeCategory}
+              searchQuery={searchQuery}
+              seenIds={progress.seenIds}
+              onConceptSelect={handleSelectConcept}
+            />
+            {/* Mobile bottom spacer so content isn't hidden behind sticky banner */}
+            <div className="h-12 lg:hidden" />
+          </div>
+        </div>
       </main>
 
       {/* Right sidebar */}
