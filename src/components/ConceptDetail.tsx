@@ -58,7 +58,7 @@ export function ConceptDetail({ concept, onBack, onSelectRelated }: ConceptDetai
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto overscroll-contain" style={{ touchAction: "pan-y", WebkitOverflowScrolling: "touch" }}>
         {/* Main post */}
         <div className="px-4 pt-3 pb-3">
           {/* Author row */}

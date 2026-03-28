@@ -98,7 +98,7 @@ export function HomeClient({
   return (
     <div className="flex justify-center h-dvh overflow-hidden">
       {/* Left sidebar - X style nav */}
-      <div className="w-[275px] shrink-0 border-r border-[var(--border)] hidden lg:block overflow-y-auto">
+      <div className="w-[275px] shrink-0 border-r border-[var(--border)] hidden lg:block overflow-y-auto overscroll-contain" style={{ touchAction: "pan-y" }}>
         <Sidebar
           activeCategory={activeCategory}
           onCategoryChange={setActiveCategory}
@@ -181,7 +181,7 @@ export function HomeClient({
           </div>
 
           {/* Scrollable feed area */}
-          <div ref={scrollRef} className="flex-1 overflow-y-auto overscroll-contain min-h-0">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto overscroll-contain min-h-0" style={{ touchAction: "pan-y", WebkitOverflowScrolling: "touch" }}>
             <Feed
               category={activeCategory}
               searchQuery={searchQuery}
@@ -195,7 +195,7 @@ export function HomeClient({
       </main>
 
       {/* Right sidebar */}
-      <div className="w-[275px] shrink-0 pl-4 pr-4 hidden xl:block overflow-y-auto">
+      <div className="w-[275px] shrink-0 pl-4 pr-4 hidden xl:block overflow-y-auto overscroll-contain" style={{ touchAction: "pan-y" }}>
         <RightSidebar
           totalCount={totalCount}
           suggestionPool={suggestionPool}
